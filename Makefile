@@ -1,7 +1,11 @@
 
-PKG = -pkg ppx_deriving_argparse
 
-build:
-	corebuild -r src/dion.native
+
+install: compile
+	python3 setup.py install --user
+
+compile:
+	python3 setup.py build_ext --inplace
+
 
 
