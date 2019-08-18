@@ -26,3 +26,4 @@ build/
 *.o
 *.c
 *.so
+golang
