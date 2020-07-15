@@ -1,6 +1,0 @@
-#!/bin/bash
-SAXON_VERSION=9he
-SAXON_PATH=/opt/saxon$SAXON_VERSION
-SAXON_JAR=$SAXON_PATH/saxon$SAXON_VERSION.jar
-
-exec java -classpath $SAXON_JAR net.sf.saxon.Transform "$@"
