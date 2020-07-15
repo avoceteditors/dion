@@ -46,7 +46,8 @@ ns = {
     "xsl": "http://www.w3.org/1999/XSL/Transform",
     "xlink": "http://www.w3.org/1999/xlink",
     "dion": "http://avoceteditors.com/xml/dion",
-    "py": "http://genshi.edgewall.org"
+    "py": "http://genshi.edgewall.org",
+    "xml": "http://www.w3.org/XML/1998/namespace"
 }
 
 path_attr = "{%s}path" % ns['dion']
@@ -68,6 +69,11 @@ date_format = "%A, %B %d, %Y"
 
 pretty_format = "{:,.0f}"
 
+book_tag = "{%s}book" % ns['book']
+chapter_tag = "{%s}chapter" % ns['book']
+article_tag = "{%s}article" % ns['book']
+
+id_attr = "{%s}id" % ns['xml']
 
 # Process XPath
 def xpath(element, path):
@@ -163,3 +169,57 @@ def wc(element):
 
     for section in xpath(element, "//book:book|//book:chapter|//book:article"):
         set_wc(section)
+
+
+# Lettrine Preprocessor
+def lett(element):
+    """Preprocess element for lettrine occurrences"""
+
+    for chapter in xpath(element, "//book:chapter"):
+        first = True
+
+        for lett in xpath(chapter, ".//dion:lett"):
+            if first:
+                first = False
+                # Check not empty
+                if lett.text != '':
+                    lett.set("rubric", lett.text[0])
+
+                    if len(lett.text) > 2:
+                        lett.text = lett.text[1:]
+                    else:
+                        lett.text = ''
+
+
+# Find Last Edit
+def find_last_edit(element, target, return_all):
+    """Finds the most recent edit and returns in list"""
+    if target == "chapter":
+        pattern = "//book:chapter|//book:article"
+        backpattern = "ancestor::book:chapter|ancestor::book:article"
+    else:
+        pattern = "//book:book"
+        backpattern = "ancestor::book:book"
+
+    data = xpath(element, pattern)
+    if return_all:
+        return data
+    else:
+        sorted_data = []
+        for datum in data:
+            for i in xpath(datum, ".//*[@dion:mtime]"):
+                mtime = i.get(mtime_attr)
+                sorted_data.append((float(mtime), i))
+
+        latest = (0.0, None)
+        for (mtime, entry) in sorted_data:
+            if mtime > latest[0]:
+                latest = (mtime, entry)
+
+        (mtime, entry) = latest
+        if entry is None:
+            return data
+        else:
+            return xpath(entry, "./%s" % backpattern)
+
+            

@@ -1,0 +1,256 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% dion.sty - Stylesheet for building Dion Documents
+%
+% Copyright (c) 2020, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% * Redistributions of source code must retain the above copyright notice, this
+%   list of conditions and the following disclaimer.
+% * Redistributions in binary form must reproduce the above copyright notice,
+%   this list of conditions and the following disclaimer in the documentation
+%   and/or other materials provided with the distribution.
+% * Neither the name of the copyright holder nor the name of its
+%   contributors may be used to endorse or promote products derived from
+%   this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+% ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+% LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+% POSSIBILITY OF SUCH DAMAGE.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{dion}[2019/10/07]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[toc, page]{appendix}
+\RequirePackage[english]{babel}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[autostyle, english=american]{csquotes}
+\RequirePackage{fancyhdr}
+\RequirePackage{fontspec}
+\RequirePackage{framed}
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage{imakeidx}
+\RequirePackage{lettrine}
+\RequirePackage{multicol}
+\RequirePackage[object=vectorian]{pgfornament}
+\RequirePackage{pifont}
+\RequirePackage{textgreek}
+\RequirePackage{tipa}
+\RequirePackage[explicit, noindentafter]{titlesec}
+\RequirePackage{pgfplots}
+\RequirePackage{numprint}
+\RequirePackage{tabulary}
+\RequirePackage{yfonts}
+\RequirePackage{epigraph}
+\RequirePackage{Typocaps}
+\RequirePackage{Elzevier}
+\RequirePackage{Zallman}
+\RequirePackage{GotIn}
+\RequirePackage{Acorn}
+\RequirePackage{mdframed}
+\RequirePackage{tocloft}
+\RequirePackage{longtable}
+\RequirePackage{calc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ToC Configuration
+\renewcommand*\contentsname{Summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section Line
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\sectionline}{
+    \begin{center}
+    \begin{tikzpicture}
+        \node (C) at (0,0) {};
+        \node (D) at (5,0) {};
+        \path (C) to [ornament=88] (D);
+    \end{tikzpicture}
+    \end{center}
+
+}
+
+% Statistics
+\newcommand{\docStats}[6]{
+    \begin{tabulary}{\textwidth}{lrrr}
+        \hline
+                     & \emph{Chapter} & \emph{Book} \\
+        \hline
+        \emph{Lines} & \numprint{#1} & \numprint{#2} \\
+        \emph{Words} & \numprint{#3} & \numprint{#4} \\
+        \emph{Chars} & \numprint{#5} & \numprint{#6} \\
+        \hline
+    \end{tabulary}
+}
+
+
+% Default Commands
+\newcommand{\titleblock}[1]{}
+
+% Title Setters
+\newcommand{\diontitle}{}
+\newcommand{\setTitle}[1]{
+    \renewcommand{\diontitle}{#1}
+}
+
+\newcommand{\dionsubtitle}{}
+\newcommand{\setSubtitle}[1]{
+    \renewcommand{\dionsubtitle}{#1}
+}
+
+% Author
+\newcommand{\authorFull}{}
+\newcommand{\authorSur}{}
+\newcommand{\setAuthor}[1]{
+    \renewcommand{\authorFull}{#1}
+}
+\newcommand{\setSurname}[1]{
+    \renewcommand{\authorSur}{#1}
+}
+
+% Publisher
+\newcommand{\publisherName}{}
+\newcommand{\pubcities}{}
+\newcommand{\setPublisher}[1]{
+    \renewcommand{\publisherName}{#1}
+}
+
+\newcommand{\setPubcities}[1]{
+    \renewcommand{\pubcities}{#1}
+}
+
+% Title Page
+\newcommand{\diontitlepage}{
+    \begin{titlepage}
+    \begin{center}
+
+    \vspace{2in}
+    \bfseries
+    \Large\MakeUppercase{\diontitle}
+
+    \vspace{1in}
+    \large\emph{\dionsubtitle}
+
+    \vspace{4.4in}
+    \authorFull
+
+    \vspace{0.5in}
+    \rule{0.75\textwidth}{0.4pt}
+
+    \normalsize\emph{\publisherName}
+
+    \small \pubcities
+
+    \end{center}
+    \end{titlepage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Separator
+\npthousandsep{,}
+
+% Set Default Fonts
+\renewcommand{\familydefault}{\rmdefault}
+
+% Formatting for Books
+\DeclareOption{book}{
+    \geometry{asymmetric, margin=1in}
+
+    % Headers and Footers
+    \pagestyle{fancy}
+    \fancyhead[RO]{\footnotesize\textsc{\authorSur}\normalsize}
+    \fancyhead[LE]{\footnotesize\textsc{\diontitle}\normalsize}
+    \fancyhead[LO, RE, CO, CE]{}
+
+    \fancyfoot[LE, RO]{\footnotesize\thepage\normalsize}
+    \fancyfoot[LO, RE, CO, CE]{}
+}
+% Formatting for Novel Chapters
+\DeclareOption{chapter}{
+    \geometry{margin=1in}
+
+    % Header Footer
+    \pagestyle{fancy}
+    \fancyhead[RO, RE]{\footnotesize \textit{\diontitle} \normalsize}
+    \fancyhead[LO, LE]{\footnotesize \authorSur\normalsize}
+    \fancyhead[CO, CE]{}
+
+    \fancyfoot[RE, RO]{\footnotesize\thepage\normalsize}
+    \fancyfoot[LO, LE, CO, CE]{}
+
+    \let\cleardoublepage=\clearpage
+}
+% Formatting for Novels
+\DeclareOption{hidetitles}{
+    \titleformat{\part}[block]{\Huge\center\textsc{#1}}{}{}{}
+
+    \titleformat{\chapter}[block]{}{}{}{}[\addcontentsline{toc}{chapter}{ #1}]
+    \titleformat{\section}[block]{}{}{}{}[\mbox{}]
+    \titleformat{\subsection}[block]{}{}{}{}
+    \titleformat{\subsubsection}[block]{}{}{}{}
+    \titleformat{\paragraph}[block]{}{}{}{}
+    \titleformat{\subparagraph}[block]{}{}{}{}    \renewcommand{\titleblock}[1]{
+        \footnotesize\textsc{#1}
+
+        \sectionline\normalsize}
+}
+
+% Formatting for Book Chapters
+\DeclareOption{showtitles}{
+    \titleformat{\part}[block]{\Huge\bfseries\center\MakeUppercase{#1}}{}{}{}
+    \titleformat{\chapter}[block]{\Large\flushright\bfseries\MakeUppercase{#1}}{}{}{}
+        [\addcontentsline{toc}{chapter}{ #1}]
+    \titleformat{\section}[block]{\large\bfseries #1}{}{}{}
+        [\addcontentsline{toc}{section}{  #1}]
+    \titleformat{\subsection}[block]{\normalsize\bfseries\emph{#1}}{}{}{}
+    \titleformat{\subsubsection}[block]{\normalsize\bfseries #1}{}{}{}
+    \titleformat{\paragraph}{\normalsize #1}{}{}{}
+    \titleformat{\subparagraph}{\normalsize\emph{#1}}{}{}{}
+}
+
+% Lettrine Font
+
+\DeclareOption{norubric}{}
+\DeclareOption{gothrubric}{
+    \renewcommand{\LettrineFontHook}{\Typocapsfamily}
+}
+
+% Todo Block
+\newcommand{\todo}[1]{
+    \begin{mdframed}
+        \tiny
+        \noindent\textbf{TODO ITEM:}
+
+        #1
+        \normalsize
+    \end{mdframed}
+}
+
+
+% Set Default
+\ExecuteOptions{book, showtitles, norubric}
+\ProcessOptions\relax
+
+\linespread{1.25}
+
+
+\endinput

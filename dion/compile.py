@@ -41,20 +41,9 @@ import dion.xml
 logger = dion.log.get_logger("dion")
 
 
-# Run Main CLI process
-def run(args):
-    """Main CLI process called from command-line to
-    compile XML document with relevant includes into
-    a cache.xml file"""
-    logger.info("Called compile command")
-
-    # Read Source
-    source = pathlib.Path(args.source)
-
-    if not source.exists():
-        logger.warn("Source path does not exist: %s" % str(source))
-        sys.exit(1)
-
+# Compile Source Data
+def compile(source):
+    """Compiles Source Data"""
     try:
         # Read in XML data
         doc = lxml.etree.parse(str(source))
@@ -69,19 +58,42 @@ def run(args):
 
         # Preprocess
         dion.xml.wc(element)
+        dion.xml.lett(element)
+
+        return element
 
     except Exception as err:
         logger.warn("Issue compiling XML data: %s" % err)
         sys.exit(1)
 
 
-
+def write(path, element):
     # Output
+    logger.debug("Writing data to file")
     data = lxml.etree.tostring(element, pretty_print=True)
+
+    with open(path, 'wb') as f:
+        f.write(data)
+
+
+# Run Main CLI process
+def run(args):
+    """Main CLI process called from command-line to
+    compile XML document with relevant includes into
+    a cache.xml file"""
+    logger.info("Called compile command")
+
+    # Read Source
+    source = pathlib.Path(args.source)
+
+    if not source.exists():
+        logger.warn("Source path does not exist: %s" % str(source))
+        sys.exit(1)
+
+    xml = compile(source)
 
     output = pathlib.Path(args.output)
     if not output.parent.exists():
         output.parent.mkdir(parents=True)
-    with open(output, 'wb') as f:
-        f.write(data)
 
+    write(output, xml)

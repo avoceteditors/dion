@@ -31,13 +31,13 @@
 
 # Module Imports
 import argparse
-import pathlib
 import sys
 
 # Local Imports
 import dion
-import dion.log
+import dion.build
 import dion.compile
+import dion.log
 
 if __name__ == '__main__':
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     )
     parser.set_defaults(func=dion.report_version)
 
-    ############### Options #################
+    # Otions
     opts = parser.add_argument_group("Options")
 
     # Debug
@@ -64,10 +64,39 @@ if __name__ == '__main__':
         "-v", "--verbose", action="store_true",
         help="Enables verbosity in logging messages")
 
-
-    ################ Commands ###################
+    # Commands
     cmds = parser.add_subparsers(title="Commands")
 
+    # Build Command
+    build = cmds.add_parser("build", help="Builds LaTeX or HTML document")
+    build.set_defaults(func=dion.build.run)
+
+    build.add_argument(
+        "-a", "--all", action="store_true")
+
+    build.add_argument(
+        "-E", "--engine",
+        choices=["lualatex", "pdflatex", "xelatex"],
+        default="xelatex",
+        help="Sets the LaTeX engine to use in rendering PDF's")
+
+    build.add_argument(
+        "-s", "--source", default=".dion/project.xml",
+        help="Path to source XML")
+
+    build.add_argument(
+        "-o", "--output", default="build",
+        help="Path to output compiled XML document")
+
+    build.add_argument(
+        "-P", "--post-process", action="store_true",
+        help="Sets whether to perform post-processing before writing to file")
+
+    build.add_argument(
+        "-T", "--type", choices=["book", "chapter", "web"], default="book",
+        help="Sets the build type")
+
+    # Compile Command
     compile = cmds.add_parser("compile", help="Compiles XML documents")
     compile.set_defaults(func=dion.compile.run)
 
@@ -77,17 +106,19 @@ if __name__ == '__main__':
 
     compile.add_argument(
         "source", default="project.xml",
-         help="Source file to compile")
-    
+        help="Source file to compile")
+
     # Version Command
     vers = cmds.add_parser("version", help="Reports version informaiton")
     vers.set_defaults(func=dion.report_version)
 
-    ################# Parse Args #################
+    # Parse Args
     args = parser.parse_args()
 
+    # Init Logger
     dion.log.set_logger(args.verbose, args.debug)
 
+    # Run Application
     args.func(args)
 
     # Exit
