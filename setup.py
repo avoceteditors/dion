@@ -1,30 +1,44 @@
 from distutils.core import setup
-import pathlib
-import re
+from Cython.Build import cythonize
 
-# Configure Package Names
+import re
+import pathlib
+
+# Configure Packages
 packages = [
     "dion",
 ]
 package_dirs = {}
-
+exts = []
 for package in packages:
-    package_dirs[package] = re.sub("\.", "/", package)
+    src = re.sub("\.", "/", package)
+    package_dirs[package] = src
+
+    # Find Cython Extensions
+    path = pathlib.Path(src)
+    for i in path.rglob("*.pyx"):
+        exts.append(str(i))
+
+    for i in path.rglob("*.pxd"):
+        exts.append(str(i))
 
 # Configure Scripts
-scripts_dir = pathlib.Path("scripts")
-scripts =[]
+scripts_path = pathlib.Path("scripts")
+scripts = []
+for i in scripts_path.glob('*'):
+    if i.is_file():
+        scripts.append(str(i))
 
-for i in scripts_dir.glob("*"):
-    scripts.append(str(i))
 
-
-# Initialize Library
 setup(
     name="dion",
-    version="2020.1",
-    packages=packages,
-    package_dir=package_dirs,
+    version="2021.1",
     scripts=scripts,
-    package_data={'dion':['data/*.xsl', 'data/*/*.xsl', 'data/dion.sty', 'data/*/*.sty']} 
+    package_dir=package_dirs,
+    packages=packages,
+    #package_data={"avocet": ['avocet/data/*.sql']},
+    ext_modules=cythonize(exts, language_level=3)
 )
+
+
+
