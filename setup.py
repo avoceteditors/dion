@@ -26,5 +26,5 @@ setup(
     packages=packages,
     package_dir=package_dirs,
     scripts=scripts,
-    package_data={'dion':['data/Makefile', 'data/sql/*.sql']} 
+    package_data={'dion':['data/*.xsl', 'data/*/*.xsl', 'data/dion.sty', 'data/*/*.sty']} 
 )
