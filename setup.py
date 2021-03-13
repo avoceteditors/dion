@@ -7,6 +7,7 @@ import pathlib
 # Configure Packages
 packages = [
     "dion",
+    "dion.yml"
 ]
 package_dirs = {}
 exts = []
