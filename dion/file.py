@@ -27,54 +27,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ##############################################################################
 
-import dion.yml
-import dion.tex
+class File:
 
-class Source:
-
-    def __init__(self, path, registry):
+    def __init__(self, path):
         self.path = path
-        self.data_yml = {}
-        self.data_tex = {}
-        self.data_rst = {}
-        self.data_other = {}
-        self.registry = registry
-        self.update()
-
-
-    def update(self):
-        for i in self.path.rglob("*"):
-            if i.is_file():
-                self.append(i)
-        
-    def files(self):
-        data = {}
-        data.update(self.data_yml)
-        data.update(self.data_tex)
-        data.update(self.data_rst)
-        return data
-
-    def __repr__(self):
-        return f"[YaML: {len(self.data_yml)}, LaTeX: {len(self.data_tex)}, RST: {len(self.data_rst)}, Other: {len(self.data_other)}]"
-
-    def append(self, path):
-        if path.suffix == ".tex":
-            tex = dion.tex.read(path)
-            if tex is not None:
-                self.data_tex[path] = tex
-        elif path.suffix == ".rst":
-            self.data_rst[path] = None
-        elif path.suffix == ".yml":
-            self.data_yml[path] = dion.yml.read(path) 
-        else:
-            self.data_other[path] = None
-
-    def update_registry(self):
-
-        for data in self.data_yml.values():
-            lang = data.get("language", None)
-            if lang is not None:
-                self.registry.update(lang, data)
-
-
-
+        self.stat = path.stat()
+        self.mtime = self.stat.st_mtime
+        self.valid = True
