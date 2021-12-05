@@ -24,3 +24,6 @@ dion-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+dion
+mix.lock
+.formatter.exs

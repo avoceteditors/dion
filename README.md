@@ -31,5 +31,15 @@ be found at [https://hexdocs.pm/dion](https://hexdocs.pm/dion).
 
 ## Milestones
 
+* **Inline Lexical Analysis** - v.0.1.x (*In-Progress*)
+
+  Work on this feature will occur in `Dion.Lexers.RST` and will
+  cover the lexical analysis of strings.  The goal is to identify
+  markup for elements that occur within a block.
+
+  * Test
+
+  
+
 
 
