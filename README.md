@@ -37,7 +37,9 @@ be found at [https://hexdocs.pm/dion](https://hexdocs.pm/dion).
   cover the lexical analysis of strings.  The goal is to identify
   markup for elements that occur within a block.
 
-  * Test
+  | Version | Target |
+  |---|---|
+  | 0.1.0 | Punctual markup, such as bold, italics, bolded italics, inline code, literal, and quotes. |
 
   
 
