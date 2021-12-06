@@ -9,7 +9,9 @@ from the Docutils library.
 Its name is a contraction of Διονυσος, intending to evoke
 the Kunsttriebe as described by Nietzsche.  That is, using
 a simple markup language to reduce the role of Απολλων in
-the productive use of language.
+the productive use of language.  Upon the release of 1.0.0,
+work will begin on a a document processor, language creation
+tool, and server; all of which will use Dion in processing source text.
 
 
 ## Installation
