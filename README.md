@@ -16,6 +16,8 @@ tool, and server; all of which will use Dion in processing source text.
 
 ## Installation
 
+**Note**: Dion is not yet available on Hex.
+
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `dion` to your list of dependencies in `mix.exs`:
 
