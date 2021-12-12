@@ -10,10 +10,15 @@ defmodule Dion.Lexers.RST do
   Function used to perform lexical analysis to identify inline elements.
   """
   @doc since: "0.1.0"
-  def lex_inline(text) do
-    text
-    |> Dion.Lexers.split_line
-    |> Stream.map(&Task.async(Dion.Lexers.RST.Inline, :analyze_word, [&1]))
-    |> Enum.map(&Task.await(&1))
+
+  def lex_inline(text, lineno) do
+    Dion.Lexers.RST.Inline.lex(text, lineno)
   end
+  def lex_inline(text) do
+    lex_inline(text, 0)
+  end
+
+
+
+
 end
